@@ -1,0 +1,66 @@
+<div class="min-h-screen bg-gray-800 p-8 max-w-7xl mx-auto">
+  <div class="flex items-center gap-4 mb-2 ml-38">
+    <span class="text-9xl mb-6">🎬</span>
+    <div class="flex flex-col">
+         <h1 class="text-4xl ml-20 mb-5 font-bold font-serif text-indigo-300">~My Movie Tracker~</h1>
+         <p class="text-gray-400 ml-30 text-2xl mb-8 mt-4 font-semibold font-serif">★ {{movies().length}} movies in your list</p>
+    </div>
+    <span class="text-9xl mb-6 ml-12">🎬</span>
+  </div>
+  <div class="flexbox flex-col gap-4 bg-gray-700 p-6 rounded-2xl mb-5 ml-52 max-w-2xl">
+    <h2 class="text-white font-serif text-xl font-semibold">Add a movie</h2>
+    <input pInputText [(ngModel)]="movieTitle" placeholder="Enter a new Movie: " class="ml-4"/>
+    <p-select [(ngModel)]="movieGenre" [options]="genres" optionLabel="label" optionValue="value" placeholder="Select a genre" class="ml-4"/>
+    
+    <div class="flex items-center gap-3">
+      <span class="text-white font-serif text-xl mb-4">Your rating:</span>
+      <p-rating [(ngModel)]="movieRating" class="mb-4 "/>
+      
+    </div>
+    <div class="flex gap-30 items-end">
+      <textarea pTextarea [(ngModel)]="notes" placeholder="Notes" rows="3"></textarea>
+      <button pButton label="Add Movie" icon="pi pi-plus" (click)="addMovie()" class="ml-30"></button>
+    </div>
+  </div>
+  <div class="flexbox flex-col gap-4 bg-gray-700 p-6 rounded-2xl mb-5 max-w-2xl items-center ml-52">
+    <span class="text-white font-serif text-xl font-semibold">Filter by genre:</span>
+    <p-select [(ngModel)]="filterGenre" [options]="genres" optionLabel="label" optionValue="value" placeholder="All genres" class="w-48 ml-4"/>
+    <button pButton label="Reset" (click)="filterGenre =''" class="ml-4"></button>
+  </div>
+  <p-table [value]="filteredMovies" class="w-3xl ml-40">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Title</th>
+        <th>Genre</th>
+        <th>Rating</th>
+        <th>Status</th>
+        <th>Notes</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-movie>
+      <tr>
+        <td class="text-white font-medium">{{ movie.title }}</td>
+        <td>
+          <p-tag [value]="movie.genre" severity="info"/>
+        </td>
+        <td>
+          <p-rating [(ngModel)]="movie.rating" [readonly]="true"/>
+        </td>
+        <td>
+          <button pButton [label]="movie.watched ? 'Watched' : 'Unwatched'" [severity]="movie.watched ? 'success' : 'warn'" size="small" (click)="ifWatched(movie)"></button>
+       <td class="text-gray-400 text-sm">{{movie.notes || 'No notes'}} </td>
+        <td>
+          <button pButton icon="pi pi-trash" severity="danger" size="small" (click)="deleteMovie(movie.id)"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="10" class="text-center text-gray-400 py-8">
+          Add a movie to begin!
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
